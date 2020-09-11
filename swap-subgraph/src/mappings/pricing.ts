@@ -48,6 +48,10 @@ export function getEthPriceInUSD(): BigDecimal {
 let WHITELIST: string[] = [
   '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // WETH
   '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+  '0xdac17f958d2ee523a2206206994597c13d831ec7', // USDT
+  '0xc00e94cb662c3520282e6f5717214004a7f26888', // COMP
+  '0x6b175474e89094c44da98b954eedeac495271d0f', // DAI
+  '0x514910771af9ca656af840dff83e8264ecf986ca', // LINK
   '0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b', // CRO
 ]
 
