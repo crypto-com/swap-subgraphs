@@ -1,0 +1,190 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: mainnet
+    source:
+      address: '0x9DEB29c9a4c7A88a3C0257393b7f3335338D9A9D'
+      abi: Factory
+      startBlock: 10828414
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/factory.ts
+      entities:
+        - Factory
+      abis:
+        - name: Factory
+          file: ./abis/factory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleNewPair
+  - kind: ethereum/contract
+    name: CROUSDC
+    network: mainnet
+    source:
+      address: "0x35e8777ec43cb99e935588dcd0305268f06c1274"
+      abi: Pair
+      startBlock: 10828523
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Price
+        - HourlyPriceHistory
+      abis:
+        - name: Pair
+          file: ./abis/pair.json
+      eventHandlers:
+        - event: Sync(uint112,uint112)
+          handler: handleSync
+      file: ./src/mappings/crousdc.ts
+  - kind: ethereum/contract
+    name: ETHUSDC
+    network: mainnet
+    source:
+      address: "0x3aa370aacf4cb08c7e1e7aa8e8ff9418d73c7e0f"
+      abi: Pair
+      startBlock: 10828802
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Price
+        - HourlyPriceHistory
+      abis:
+        - name: Pair
+          file: ./abis/pair.json
+      eventHandlers:
+        - event: Sync(uint112,uint112)
+          handler: handleSync
+      file: ./src/mappings/ethusdc.ts
+  - kind: ethereum/contract
+    name: StakingOneYear
+    network: mainnet
+    source:
+      address: "0x6aba3E56AEb3b95aD64161103D793fAc5F6ce4F7"
+      startBlock: 10828242
+      abi: ERC900
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Staking
+      abis:
+        - name: ERC900
+          file: ./abis/erc900.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256,bytes)
+          handler: handleStaked
+        - event: Unstaked(indexed address,uint256,uint256,bytes)
+          handler: handleUnstaked
+      file: ./src/mappings/staking.ts
+  - kind: ethereum/contract
+    name: StakingTwoYear
+    network: mainnet
+    source:
+      address: "0x26388d599A677C6A8BCc4c113F0A34e6Ced9493D"
+      startBlock: 10828244
+      abi: ERC900
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Staking
+      abis:
+        - name: ERC900
+          file: ./abis/erc900.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256,bytes)
+          handler: handleStaked
+        - event: Unstaked(indexed address,uint256,uint256,bytes)
+          handler: handleUnstaked
+      file: ./src/mappings/staking.ts
+  - kind: ethereum/contract
+    name: StakingThreeYear
+    network: mainnet
+    source:
+      address: "0x0A3c6EEC8408bdED9000DA65AfdB8a8fDA99E253"
+      startBlock: 10828245
+      abi: ERC900
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Staking
+      abis:
+        - name: ERC900
+          file: ./abis/erc900.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256,bytes)
+          handler: handleStaked
+        - event: Unstaked(indexed address,uint256,uint256,bytes)
+          handler: handleUnstaked
+      file: ./src/mappings/staking.ts
+  - kind: ethereum/contract
+    name: StakingFourYear
+    network: mainnet
+    source:
+      address: "0x4f2bC163c8758D7F88771496F7B0Afde767045F3"
+      startBlock: 10828248
+      abi: ERC900
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Staking
+      abis:
+        - name: ERC900
+          file: ./abis/erc900.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256,bytes)
+          handler: handleStaked
+        - event: Unstaked(indexed address,uint256,uint256,bytes)
+          handler: handleUnstaked
+      file: ./src/mappings/staking.ts
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: mainnet
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/pair.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Pair
+          file: ./abis/pair.json
+        - name: Factory
+          file: ./abis/factory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleSwap
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Sync(uint112,uint112)
+          handler: handleSync

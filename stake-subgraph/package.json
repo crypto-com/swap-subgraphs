@@ -1,0 +1,16 @@
+{
+  "name": "stake-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen --output-dir src/types/",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ crypto-com/stake-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ crypto-com/stake-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ crypto-com/stake-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 crypto-com/stake-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.18.0",
+    "@graphprotocol/graph-ts": "0.18.0"
+  }
+}

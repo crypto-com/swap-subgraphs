@@ -1,0 +1,212 @@
+#######################
+# Swap
+#######################
+
+type Factory @entity {
+  # factory address
+  id: ID!
+
+  # pair info
+  pairCount: Int!
+
+  # total liquidity
+  totalLiquidityUSD: BigDecimal!
+  totalLiquidityETH: BigDecimal!
+}
+
+type Token @entity {
+  # token address
+  id: ID!
+
+  # mirrored from the smart contract
+  symbol: String!
+  name: String!
+  decimals: BigInt!
+
+  # used for other stats like marketcap
+  totalSupply: BigInt!
+
+  # liquidity across all pairs
+  totalLiquidity: BigDecimal!
+
+  # derived prices
+  derivedETH: BigDecimal
+
+  # saved for historical refernce of most liquid pairs
+  # mostLiquidPairs: [PairDayData]!
+}
+
+type Pair @entity {
+  # pair address
+  id: ID!
+
+  # mirrored from the smart contract
+  token0: Token!
+  token1: Token!
+  reserve0: BigDecimal!
+  reserve1: BigDecimal!
+  totalSupply: BigDecimal!
+
+  # derived liquidity
+  reserveETH: BigDecimal!
+  reserveUSD: BigDecimal!
+  trackedReserveETH: BigDecimal! # used for separating per pair reserves and global
+  # Price in terms of the asset pair
+  token0Price: BigDecimal!
+  token1Price: BigDecimal!
+
+  # creation stats
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+
+  # Fields used to help derived relationship
+  liquidityProviderCount: BigInt! # used to detect new exchanges
+
+  liquidityPositions: [LiquidityPosition]!
+}
+
+type LiquidityProvider @entity {
+  # wallet address
+  id: ID!
+  address: String!
+
+  liquidityPositions: [LiquidityPosition]!
+
+  totalLiquidityProvidedETH: BigDecimal!
+  totalLiquidityProvidedUSD: BigDecimal!
+
+  totalTokenStaked: BigDecimal!
+  totalTokenStakedUSD: BigDecimal!
+
+  # liquidity provided / total liquidity
+  share: BigDecimal!
+  # staking / liquidity provided
+  factorA: BigDecimal!
+  # staking term
+  factorB: BigDecimal!
+  # share * factorA * factorB * 1000000
+  crops: BigDecimal!
+  # crops / total crops * reward pool
+  reward: BigDecimal!
+}
+
+type LiquidityPosition @entity {
+  id: ID!
+
+  pair: Pair!
+  provider: LiquidityProvider!
+
+  reserveETH: BigDecimal!
+  reserveUSD: BigDecimal!
+
+  liquidityTokenBalance: BigDecimal!
+  totalSupply: BigDecimal!
+
+  liquidityProvidedETH: BigDecimal!
+  liquidityProvidedUSD: BigDecimal!
+}
+
+type RewardPositionSnapshot @entity {
+  # wallet address - timestamp
+  id: ID!
+  address: String!
+  timestamp: BigInt!
+
+  liquidityProvider: LiquidityProvider!
+
+  totalLiquidityProvidedETH: BigDecimal!
+  totalLiquidityProvidedUSD: BigDecimal!
+
+  totalTokenStaked: BigDecimal!
+  totalTokenStakedUSD: BigDecimal!
+
+  # liquidity provided / total liquidity
+  share: BigDecimal!
+  # staking / liquidity provided
+  factorA: BigDecimal!
+  # staking term
+  factorB: BigDecimal!
+  # share * factorA * factorB * 1000000
+  crops: BigDecimal!
+  # crops / total crops * reward pool
+  reward: BigDecimal!
+}
+
+#######################
+# Pricing
+#######################
+
+# Latest prices projected from Swap contracts, singleton
+type Price @entity {
+  id: ID!
+  eth: BigDecimal!
+  cro: BigDecimal!
+}
+
+# Snapshot of price data per hour
+type HourlyPriceHistory @entity {
+  id: ID!
+  timestamp: BigInt!
+
+  eth: BigDecimal!
+  cro: BigDecimal!
+}
+
+#######################
+# Staking
+#######################
+
+# Each stake onchain maps to on Stake entity
+type Stake @entity {
+  id: ID!
+  stakedFor: String!
+  stakedBy: String!
+  tokenAmount: BigDecimal!
+  tokenAmountUSD: BigDecimal!
+  contractAddress: String!
+  term: String!
+  stakedAt: BigInt!
+  unlockAt: BigInt!
+}
+
+type Staker @entity {
+  id: ID!
+  address: String!
+
+  stakeCount: Int!
+
+  totalTokenStaked: BigDecimal!
+  totalTokenStakedUSD: BigDecimal!
+
+  stakes: [Stake]!
+}
+
+# Metadata projected from all stakes
+type Staking @entity {
+  id: ID!
+
+  stakeCount: Int!
+  stakerCount: Int!
+
+  totalTokenStaked: BigDecimal!
+  totalTokenStakedUSD: BigDecimal!
+
+  stakes: [Stake]!
+
+  liquidityProviders: [LiquidityProvider]!
+  totalCrops: BigDecimal!
+}
+
+# Snapshot of staking data per hour
+type StakingSnapshot @entity {
+  id: ID!
+  timestamp: BigInt!
+
+  stakeCount: Int!
+  stakerCount: Int!
+
+  totalTokenStaked: BigDecimal!
+  totalTokenStakedUSD: BigDecimal!
+
+  totalCrops: BigDecimal!
+}
