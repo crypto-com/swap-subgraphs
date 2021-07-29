@@ -1,5 +1,11 @@
 # DeFi Swap Subgraphs
 
+Deprecated
+
+Go to below repos instead
+https://github.com/crypto-com/defi-swap-swap-subgraph
+https://github.com/monacohq/defi-swap-swap-data-subgraph
+
 [![Styled With Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
 As a new DeFi protocol, DeFi Swap is designed to be the best place to swap and farm DeFi coins at the best available rate, leveraging proven and audited protocols, while offering an outstanding incentive program powered by CRO.
